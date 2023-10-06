@@ -10,10 +10,14 @@ const getNums = function (input) {
   input = String(input).replaceAll(' ', '');
 
   for (let i = 0; i < input.length; i++) {
-    if (input[i] == Number(input[i])) {
+    if (input[i] === Number(input[i])) {
       result += input[i];
     }
   }
 
   return parseInt(result, 10);
 }
+
+checkLength('проверяемая строка', 20);
+checkPalidromes('Лёша на полке клопа нашёл ');
+getNums('2023 год');
