@@ -1,8 +1,8 @@
-const checkLength = (string, strLength) => string.length <= strLength;
+const checkStringLength = (string, strLength) => string.length <= strLength;
 
 const checkPalidromes = (string) => {
-  string = string.replaceAll(' ', '').toLowerCase();
-  return string === string.split('').reverse().join('');
+  let reversedString = string.replaceAll(' ', '').toLowerCase();
+  return string === reversedString;
 };
 
 const getNums = function (input) {
