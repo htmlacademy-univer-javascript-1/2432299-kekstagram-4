@@ -2,15 +2,15 @@ const getTimeInMins = (time) => {
   const timeSplit = time.split(':').map(Number);
 
   return timeSplit[0] * 60 + timeSplit[1];
-}
+};
 
 const checkIfInTime = (dayStartTime, dayEndTime, meetingStartTime, meetingDuration) => {
-  let dayStartInMins = getTimeInMins(dayStartTime);
-  let dayEndInMins = getTimeInMins(dayEndTime);
-  let meetingStartInMins = getTimeInMins(meetingStartTime);
+  const dayStartInMins = getTimeInMins(dayStartTime);
+  const dayEndInMins = getTimeInMins(dayEndTime);
+  const meetingStartInMins = getTimeInMins(meetingStartTime);
 
   return (meetingStartInMins >= dayStartInMins) && (meetingStartInMins + meetingDuration <= dayEndInMins);
-}
+};
 
 checkIfInTime('08:00', '17:30', '14:00', 90);
 checkIfInTime('8:0', '10:0', '8:0', 120);
