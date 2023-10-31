@@ -1,37 +1,48 @@
-import {getRandomInteger, getRandomArrayElement, createRandomUniqueNum}  from './util.js';
-
-const PHOTOS_COUNT = 25;
-const IdsNum = {
-  MIN: 1,
-  MAX: 25
-};
-const UrlsNum = {
-  MIN: 1,
-  MAX: 25
-};
-const AvatarIdsNum = {
-  MIN: 1,
-  MAX: 6,
-};
-const LikesCount = {
-  MIN: 15,
-  MAX: 200,
-};
-const DESCRIPTIONS = [
+const getPhotosCount = () => 25;
+const getIdsNum = () => {
+  return {
+    MIN: 1,
+    MAX: 25
+  };
+}
+const getUrlsNum = () => {
+  return {
+    MIN: 1,
+    MAX: 25
+  };
+}
+const getAvatarIdsNum = () => {
+  return {
+    MIN: 1,
+    MAX: 6,
+  };
+}
+const getLikesCount = () => {
+  return {
+    MIN: 15,
+    MAX: 200,
+  };
+}
+const getDescriptions = () => {
+  return [
   'lol',
   'cool',
   'hype',
   'swag'
-];
-const COMMENT_SENTENCES = [
+  ];
+}
+const getCommentSentences = () => {
+  return [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
-];
-const COMMENTATORS_NAMES = [
+  ];
+}
+const getCommentatorsNames = () => {
+  return [
   'Иван',
   'Ваня',
   'Мария',
@@ -40,29 +51,7 @@ const COMMENTATORS_NAMES = [
   'Юлия',
   'Люпита',
   'Вашингтон'
-];
+  ];
+}
 
-const generateId = createRandomUniqueNum(IdsNum.MIN, IdsNum.MAX);
-const generateUrl = createRandomUniqueNum(UrlsNum.MIN, UrlsNum.MAX);
-const generateCommentId = createRandomUniqueNum(1, 1000);
-
-const createMessage = () => getRandomArrayElement(COMMENT_SENTENCES);
-
-const createComment = () => ({
-  id: generateCommentId(),
-  avatar: `img/avatar-${getRandomInteger(AvatarIdsNum.MIN, AvatarIdsNum.MAX)}.svg`,
-  message: createMessage(),
-  name: getRandomArrayElement(COMMENTATORS_NAMES),
-});
-
-const createPhotoDescription = () => ({
-  id: generateId(),
-  url: `photos/${generateUrl()}.jpg`,
-  description: getRandomArrayElement(DESCRIPTIONS),
-  likes: getRandomInteger(LikesCount.MIN, LikesCount.MAX),
-  comments: Array.from({length: getRandomInteger(0, 30)}, createComment)
-});
-
-const getPhotos = () => Array.from({length: PHOTOS_COUNT}, createPhotoDescription);
-
-export {getPhotos};
+export {getPhotosCount, getIdsNum, getUrlsNum, getAvatarIdsNum, getLikesCount, getDescriptions, getCommentSentences, getCommentatorsNames};
