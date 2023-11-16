@@ -1,3 +1,1 @@
-import {getPhotos} from './util.js';
-
-getPhotos();
+import './popup.js';
