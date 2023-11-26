@@ -40,4 +40,6 @@ const createPhotoDescription = () => ({
 
 const getPhotos = () => Array.from({length: getPhotosCount()}, createPhotoDescription);
 
-export {getPhotos};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export { getPhotos, isEscapeKey };
