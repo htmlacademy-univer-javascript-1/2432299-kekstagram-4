@@ -11,15 +11,28 @@ const bigPicElements = {
   description: document.querySelector('.social__caption')
 };
 
-const getCommentTemplate = (comment) => `<li class="social__comment">
-    <img class="social__picture"
-      src=${comment.avatar} alt=${comment.name} width="35" height="35">
-    <p class="social__text">${comment.message}</p>
-  </li>`;
+const getCommentTemplate = (comment) => {
+  const socialComment = document.createElement('li');
+  const commentAvatar = document.createElement('img');
+  const commentText = document.createElement('p');
+  socialComment.classList.add('social__comment');
+  commentAvatar.classList.add('social__picture');
+  commentText.classList.add('social__text');
+  commentAvatar.src = comment.avatar;
+  commentAvatar.alt = comment.name;
+  commentAvatar.width = 35;
+  commentAvatar.height = 35;
+  commentText.textContent = comment.message;
+  socialComment.append(commentAvatar);
+  socialComment.append(commentText);
+  return socialComment;
+};
 
 const commentsInit = (data) => {
   if (data) {
-    commentsContainer.insertAdjacentHTML('afterbegin', data.map((comment) => getCommentTemplate(comment)).join(''));
+    data.forEach((comment) => {
+      commentsContainer.appendChild(getCommentTemplate(comment));
+    });
   }
 };
 
@@ -33,11 +46,11 @@ const renderComments = (comments) => {
   commentsLoader.classList.add('hidden');
 };
 
-const renderBigPic = (photo) => {
-  bigPicElements.img.src = photo.url;
-  bigPicElements.likes.textContent = photo.likes;
-  bigPicElements.comments = photo.comments.length;
-  bigPicElements.description.textContent = photo.description;
+const renderBigPic = ({url, description, likes, comments}) => {
+  bigPicElements.img.src = url;
+  bigPicElements.likes.textContent = likes;
+  bigPicElements.comments = comments.length;
+  bigPicElements.description.textContent = description;
 };
 
 export { renderComments, renderBigPic };

@@ -14,9 +14,9 @@ const onDocumentKeydown = (evt) => {
 
 const onCloseBtnClick = () => closeViewPopup();
 
-const openPopup = (photo) => {
-  renderBigPic(photo);
-  renderComments(photo.comments);
+const openPopup = ({url, description, likes, comments}) => {
+  renderBigPic({url, description, likes, comments});
+  renderComments(comments);
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
@@ -30,10 +30,8 @@ function closeViewPopup() {
 }
 
 
-const openViewPopup = (pictures, photos) => {
-  pictures.forEach((picture, index) => {
-    picture.addEventListener('click', () => {openPopup(photos[index]);});
-  });
+const openViewPopup = ({url, description, likes, comments}) => {
+  openPopup({url, description, likes, comments});
 
   closeBtn.addEventListener('click', onCloseBtnClick);
 
