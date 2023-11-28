@@ -1,8 +1,9 @@
 import './render.js';
 
-const commentsContainer = document.querySelector('.social__comments');
+let commentsContainer = document.querySelector('.social__comments');
 const commentsCount = document.querySelector('.social__comment-count');
 const commentsLoader = document.querySelector('.comments-loader');
+let currentComments;
 
 const bigPicElements = {
   img: document.querySelector('.big-picture__img').querySelector('img'),
@@ -28,22 +29,53 @@ const getCommentTemplate = (comment) => {
   return socialComment;
 };
 
+let startIndex;
+let endIndex;
+
 const commentsInit = (data) => {
-  if (data) {
-    data.forEach((comment) => {
+  endIndex = Math.min(endIndex + 5, data.length);
+  startIndex += 5;
+
+  const commsToInit = data.slice(startIndex, endIndex);
+
+  commentsContainer = document.querySelector('.social__comments');
+
+  if (commsToInit) {
+    commsToInit.forEach((comment) => {
       commentsContainer.appendChild(getCommentTemplate(comment));
+      commentsCount.textContent = `${endIndex} из ${data.length} комментариев`;
     });
+  }
+
+  if (endIndex === data.length) {
+    commentsLoader.classList.add('hidden');
+    startIndex = 0;
   }
 };
 
+function loadNextComments() {
+  commentsInit(currentComments);
+}
+
 const renderComments = (comments) => {
-  const socialComment = commentsContainer.querySelectorAll('li');
-  socialComment.forEach((value) => {
+  startIndex = -5;
+  endIndex = 0;
+  currentComments = comments;
+  const socialComments = commentsContainer.querySelectorAll('li');
+  socialComments.forEach((value) => {
     commentsContainer.removeChild(value);
   });
-  commentsInit(comments);
-  commentsCount.classList.add('hidden');
-  commentsLoader.classList.add('hidden');
+  commentsInit(currentComments);
+  if (comments.length <= 5) {
+    commentsCount.textContent = `${comments.length} из ${comments.length} комментариев`;
+    commentsLoader.classList.add('hidden');
+  }
+  else {
+    commentsLoader.classList.remove('hidden');
+    commentsCount.classList.remove('hidden');
+    commentsCount.textContent = `5 из ${comments.length} комментариев`;
+    commentsLoader.addEventListener('click', loadNextComments);
+  }
 };
 
 const renderBigPic = ({url, description, likes, comments}) => {
@@ -53,4 +85,6 @@ const renderBigPic = ({url, description, likes, comments}) => {
   bigPicElements.description.textContent = description;
 };
 
-export { renderComments, renderBigPic };
+const removeButtonEvent = () => commentsLoader.removeEventListener('click', loadNextComments);
+
+export { renderComments, renderBigPic, removeButtonEvent };

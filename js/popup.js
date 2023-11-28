@@ -1,5 +1,5 @@
 import { isEscapeKey } from './utils.js';
-import { renderBigPic, renderComments } from './big-picture.js';
+import { renderBigPic, renderComments, removeButtonEvent } from './big-picture.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const closeBtn = document.querySelector('.big-picture__cancel');
@@ -27,6 +27,7 @@ function closeViewPopup() {
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   closeBtn.removeEventListener('click', onCloseBtnClick);
+  removeButtonEvent();
 }
 
 
