@@ -1,5 +1,6 @@
 import { isEscapeKey } from './utils.js';
 import { disableSubmitButton, getHashtagsInput, getUploadForm } from './validate.js';
+
 import { addEffectChoose, removeEffectsChoose } from './effects.js';
 import { addScaleButtons, removeScaleButtons } from './rescale.js';
 
