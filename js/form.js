@@ -1,7 +1,10 @@
 import { isEscapeKey } from './utils.js';
 import { disableSubmitButton, getHashtagsInput, getUploadForm } from './validate.js';
 
-const uploadButton = document.querySelector('.img-upload__input');
+import { addEffectChoose, removeEffectsChoose } from './effects.js';
+import { addScaleButtons, removeScaleButtons } from './rescale.js';
+
+const uploadButton = document.querySelector('#upload-file');
 const editWin = document.querySelector('.img-upload__overlay');
 const body = document.querySelector('body');
 const closeEditBtn = document.querySelector('.img-upload__cancel');
@@ -26,18 +29,22 @@ function closeEditWin() {
   closeEditBtn.removeEventListener('click', closeEditWin);
   document.removeEventListener('keydown', onDocumentKeydown);
   uploadButton.value = '';
-  getHashtagsInput().value = '';
   descriptionInput.value = '';
+  getHashtagsInput().value = '';
   getUploadForm().removeEventListener('keydown', stopInputPropagation);
+  removeScaleButtons();
+  removeEffectsChoose();
 }
 
 const openEditWin = () => {
   body.classList.add('modal-open');
   editWin.classList.remove('hidden');
   closeEditBtn.addEventListener('click', closeEditWin);
-  document.addEventListener('keydown', onDocumentKeydown);
+  document.addEventListener('keydown', onDocumentKeydown) ;
   getUploadForm().addEventListener('keydown', stopInputPropagation);
   getUploadForm().addEventListener('submit', disableSubmitButton);
+  addScaleButtons();
+  addEffectChoose();
 };
 
 const addEditWinOpener = () => uploadButton.addEventListener('change', openEditWin);
