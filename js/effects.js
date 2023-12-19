@@ -99,6 +99,7 @@ const removeEffectsChoose = () => {
   effects.forEach((effect) => {
     effect.removeEventListener('click', onEffectsClick);
   });
+  uploadPreview.style.filter = '';
 };
 
 export { addEffectChoose, removeEffectsChoose };

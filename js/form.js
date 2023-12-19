@@ -1,14 +1,15 @@
 import { isEscapeKey } from './utils.js';
-import { disableSubmitButton, getHashtagsInput, getUploadForm } from './validate.js';
-
+import { isValid, getHashtagsInput, getUploadForm } from './validate.js';
 import { addEffectChoose, removeEffectsChoose } from './effects.js';
 import { addScaleButtons, removeScaleButtons } from './rescale.js';
+import { sendData } from './api.js';
 
 const uploadButton = document.querySelector('#upload-file');
 const editWin = document.querySelector('.img-upload__overlay');
 const body = document.querySelector('body');
 const closeEditBtn = document.querySelector('.img-upload__cancel');
 const descriptionInput = document.querySelector('.text__description');
+const uploadForm = getUploadForm();
 
 const stopInputPropagation = (evt) => {
   if (isEscapeKey(evt)) {
@@ -23,17 +24,21 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
-function closeEditWin() {
+const safeCloseEdit = () => {
   body.classList.remove('modal-open');
   editWin.classList.add('hidden');
   closeEditBtn.removeEventListener('click', closeEditWin);
   document.removeEventListener('keydown', onDocumentKeydown);
+  uploadForm.removeEventListener('keydown', stopInputPropagation);
   uploadButton.value = '';
-  descriptionInput.value = '';
-  getHashtagsInput().value = '';
-  getUploadForm().removeEventListener('keydown', stopInputPropagation);
   removeScaleButtons();
   removeEffectsChoose();
+};
+
+function closeEditWin() {
+  descriptionInput.value = '';
+  getHashtagsInput().value = '';
+  safeCloseEdit();
 }
 
 const openEditWin = () => {
@@ -41,12 +46,29 @@ const openEditWin = () => {
   editWin.classList.remove('hidden');
   closeEditBtn.addEventListener('click', closeEditWin);
   document.addEventListener('keydown', onDocumentKeydown) ;
-  getUploadForm().addEventListener('keydown', stopInputPropagation);
-  getUploadForm().addEventListener('submit', disableSubmitButton);
+  uploadForm.addEventListener('keydown', stopInputPropagation);
   addScaleButtons();
   addEffectChoose();
 };
 
+const setUploadFormSubmit = (onSuccess, onError) => {
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    if (isValid()) {
+      sendData(new FormData(evt.target))
+        .then((response) => {
+          if (response.ok) {
+            onSuccess();
+          } else {
+            throw new Error();
+          }
+        })
+        .catch(onError);
+    }
+  });
+};
+
 const addEditWinOpener = () => uploadButton.addEventListener('change', openEditWin);
 
-export { addEditWinOpener };
+export { addEditWinOpener, setUploadFormSubmit, closeEditWin, safeCloseEdit };

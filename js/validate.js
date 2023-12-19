@@ -38,12 +38,6 @@ const getErrorMessage = () => {
   }
 };
 
-const disableSubmitButton = (evt) => {
-  if (!isValid()) {
-    evt.preventDefault();
-  }
-};
-
 pristine.addValidator(getHashtagsInput(), areHashtagsValid, getErrorMessage);
 
-export { disableSubmitButton, getUploadForm, getHashtagsInput };
+export { isValid, getUploadForm, getHashtagsInput };
