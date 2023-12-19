@@ -1,45 +1,85 @@
-import {getPhotosCount, getIdsNum, getUrlsNum, getAvatarIdsNum, getLikesCount, getDescriptions, getCommentSentences, getCommentatorsNames} from './data.js';
+const errorMessage = document.querySelector('.error');
+const successMessage = document.querySelector('.success');
+const successButton = document.querySelector('.success__button');
+const errorButton = document.querySelector('.error__button');
 
-const getRandomInteger = (first, last) => Math.ceil(Math.random() * (last - first + 1) + (first - 1));
-
-const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
-
-const createRandomUniqueNum = (min, max) => {
-  const previousValues = [];
-
-  return function () {
-    let currentValue = getRandomInteger(min, max);
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomInteger(min, max);
-    }
-    previousValues.push(currentValue);
-    return currentValue;
-  };
-};
-
-const generateId = createRandomUniqueNum(getIdsNum().MIN, getIdsNum().MAX);
-const generateUrl = createRandomUniqueNum(getUrlsNum().MIN, getUrlsNum().MAX);
-const generateCommentId = createRandomUniqueNum(1, 1000);
-
-const createMessage = () => getRandomArrayElement(getCommentSentences());
-
-const createComment = () => ({
-  id: generateCommentId(),
-  avatar: `img/avatar-${getRandomInteger(getAvatarIdsNum().MIN, getAvatarIdsNum().MAX)}.svg`,
-  message: createMessage(),
-  name: getRandomArrayElement(getCommentatorsNames()),
-});
-
-const createPhotoDescription = () => ({
-  id: generateId(),
-  url: `photos/${generateUrl()}.jpg`,
-  description: getRandomArrayElement(getDescriptions()),
-  likes: getRandomInteger(getLikesCount().MIN, getLikesCount().MAX),
-  comments: Array.from({length: getRandomInteger(0, 30)}, createComment)
-});
-
-const getPhotos = () => Array.from({length: getPhotosCount()}, createPhotoDescription);
+const ALERT_SHOW_TIME = 5000;
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export { getPhotos, isEscapeKey };
+const escSuccessMessage = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    hideSuccessMessage();
+  }
+};
+
+const escSuccessMessageOnClick = (evt) => {
+  if (evt.target === successMessage) {
+    hideSuccessMessage();
+  }
+};
+
+const escErrorMessage = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    hideErrorMessage();
+  }
+};
+
+const escErrorMessageOnClick = (evt) => {
+  if (evt.target === errorMessage) {
+    hideErrorMessage();
+  }
+};
+
+const showSuccessMessage = () => {
+  successMessage.classList.remove('hidden');
+  successButton.addEventListener('click', hideSuccessMessage);
+  document.addEventListener('keydown', escSuccessMessage);
+  document.addEventListener('click', escSuccessMessageOnClick);
+};
+
+function hideSuccessMessage () {
+  successMessage.classList.add('hidden');
+  successButton.removeEventListener('click', hideSuccessMessage);
+  document.removeEventListener('keydown', escSuccessMessage);
+  document.removeEventListener('click', escSuccessMessageOnClick);
+}
+
+const showErrorMessage = () => {
+  errorMessage.classList.remove('hidden');
+  errorButton.addEventListener('click', hideErrorMessage);
+  document.addEventListener('keydown', escErrorMessage);
+  document.addEventListener('click', escErrorMessageOnClick);
+};
+
+function hideErrorMessage () {
+  errorMessage.classList.add('hidden');
+  errorButton.removeEventListener('click', hideErrorMessage);
+  document.removeEventListener('keydown', escErrorMessage);
+  document.removeEventListener('click', escErrorMessageOnClick);
+}
+
+const showAlert = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = '100';
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = '0';
+  alertContainer.style.top = '0';
+  alertContainer.style.right = '0';
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
+
+  alertContainer.textContent = message;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
+};
+
+export { isEscapeKey, showErrorMessage, showSuccessMessage, showAlert };
