@@ -82,4 +82,19 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export { isEscapeKey, showErrorMessage, showSuccessMessage, showAlert };
+const getPhotoRank = (photo) => photo.comments.length;
+
+const sortByComments = (photoA, photoB) => getPhotoRank(photoB) - getPhotoRank(photoA);
+
+const randomSort = () => Math.random() - 0.5;
+
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export { isEscapeKey, showErrorMessage, showSuccessMessage, showAlert, sortByComments, randomSort, debounce };
