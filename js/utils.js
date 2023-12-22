@@ -88,7 +88,7 @@ const sortByComments = (photoA, photoB) => getPhotoRank(photoB) - getPhotoRank(p
 
 const randomSort = () => Math.random() - 0.5;
 
-const debounce = (callback, timeoutDelay = 500) => {
+const debounce = (callback, timeoutDelay) => {
   let timeoutId;
 
   return (...rest) => {
